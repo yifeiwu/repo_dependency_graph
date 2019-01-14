@@ -32,6 +32,12 @@ module RepoDependencyGraph
     def dependent_repos(repo, options)
       repos = []
 
+      if options[:ruby_version]
+        if content = repo.content(".ruby-version")
+          repos.concat content
+        end
+      end
+
       if !options[:only] || options[:only] == "chef"
         if content = repo.content("metadata.rb")
           repos.concat scan_chef_metadata(repo.name, content)
